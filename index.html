@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Table Component</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  
+    <div id="app">
+        <table>
+
+            <thead>
+                <tr>
+                    <th v-for="header in tableHeader" v-on:click="sort(header)">{{header}}
+                        <template v-if="header == currentSort">
+                            <template v-if="currentSortDir == 'asc'">&#9660;</template>
+                            <template v-else="currentSortDir == 'desc'">&#9650;</template>
+                        </template>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="data,index in sortedTable.slice(startRow,endRow)">
+                    <td v-for="(val,key) in data">
+                        <template v-if="key == 'one' || key == 'three'">
+                            {{val}}
+                        </template>
+                        <template v-else="key == two">
+                            <input class="css-checkbox" v-if="val == false" v-on:click="toggleCheckbox(data,index)" type="checkbox">
+                            <input class="css-checkbox" v-else="val == false" v-on:click="toggleCheckbox(data,index)" type="checkbox" checked>
+                        </template>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td v-bind:colspan="footerLenght">
+                        Rows per page:
+                        
+                        <select v-on:click="selectedUpdate" v-model="selected">
+                            <option v-for="option in options" v-bind:value="option.value">
+                                {{ option.value }}
+                            </option>
+                        </select>
+
+                        <span>{{startRow+1}} - {{endRow}} of {{dataTableLenght}}</span>
+
+                        <i v-on:click="prevPage()" class="arrow left"></i>
+                        <i v-on:click="nextPage()" class="arrow right"></i>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <hr>
+
+        <form v-on:submit="addData">
+            <input type="text" v-model="inputValOne" />
+            <input type="checkbox" v-model="inputValTwo" />
+            <input type="date" v-model="inputValThree" />
+            <button type="submit">Add</button>
+        </form>
+
+        <hr>
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
